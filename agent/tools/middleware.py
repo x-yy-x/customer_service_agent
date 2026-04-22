@@ -21,7 +21,7 @@ def monitor_tool(
         result =  handler(request)
         logger.info(F"[tool monito]工具调用成功：{request.tool_call['name']}调用成功")
        
-        if request.tool_call['name'] == "fill_context_for_request":
+        if request.tool_call['name'] == "fill_context_for_report":
              request.runtime.context["report"] = True
         return result
     except Exception as e:
@@ -42,7 +42,8 @@ def log_before_model(
 @dynamic_prompt
 def report_prompt_switch(request: ModelRequest):
     is_report = request.runtime.context.get("report", False)
-    
+    logger.info(f"[report_prompt_switch]被使用，是否为报告环节{is_report}")
     if is_report:
+        print("*" * 30)
         return load_report_prompts()
     return load_system_prompts()
